@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연습장</title>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .body {
+        border: 1px solid #ddd;
+        margin: 5px;
+        overflow: hidden;
+        width: 90vw;
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+
+    }
+
+  </style>
+</head>
+<body>
+    <div class="body">
+
+        <canvas id="canvas" width="450" height="450"></canvas>
+
+    </div>
+</body>
+<script>
+    const ctx = canvas.getContext("2d")
+    const d = `M 200 200 a 70 70 0 1 1 50 0 l 100 70 a 150 150 0 0 1 -250 0 Z`
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path")
+    path.setAttribute("d", d)
+    const length = path.getTotalLength()
+
+    let offset = 0
+    const setCtx = () => {
+        ctx.strokeStyle = "orange"
+        ctx.lineWidth = 10
+        ctx.lineCap = "round"
+        ctx.lineJoin = "round"
+        ctx.setLineDash([length / 100, length / 50])
+    }
+
+    const draw = () => {
+        ctx.reset()
+        setCtx()
+
+        ctx.lineDashOffset = offset
+        ctx.stroke(new Path2D(d))
+        
+        ctx.clip(new Path2D(d))
+        ctx.drawImage(img, 0, 0, 450, 450)
+        
+        ctx.stroke(new Path2D(d))
+        offset++
+    }
+
+    const img = new Image()
+    img.src = "https://picsum.photos/800/500"
+    img.addEventListener("load", () => {
+        setInterval(draw, 50)
+    })
+</script>
+</html>
